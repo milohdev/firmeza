@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Firmeza</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Firmeza.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-dark text-white" style="width: 240px; min-height: 100vh; flex-shrink: 0;">
+            <div class="p-3">
+                <h4 class="text-center mb-4">FIRMEZA</h4>
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")"
+                           asp-area="" asp-page="/Index">
+                            🏠 Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Productos") == true ? "active" : "")"
+                           asp-area="" asp-page="/Productos/Index">
+                            📦 Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Clientes") == true ? "active" : "")"
+                           asp-area="" asp-page="/Clientes/Index">
+                            👥 Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Ventas") == true ? "active" : "")"
+                           asp-area="" asp-page="/Ventas/Index">
+                            🧾 Ventas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="flex-grow-1 d-flex flex-column">
+            <nav class="navbar navbar-expand-sm navbar-light bg-white mb-3">
+                <div class="container-fluid">
+                    <span class="navbar-brand">@ViewData["Title"]</span>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid flex-grow-1">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <footer class="border-top text-center">
+                <div class="container-fluid">
+                    &copy; 2026 Firmeza · Materiales de construcción
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

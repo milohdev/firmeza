@@ -1,0 +1,63 @@
+@page
+@model Firmeza.Web.Pages.Productos.IndexModel
+
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<h1>Productos</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Crear Nuevo</a>
+</p>
+
+<form method="get" class="row g-3 mb-3">
+    <div class="col-auto">
+        <input type="text" name="Busqueda" value="@Model.Busqueda" class="form-control" placeholder="Buscar por nombre..." />
+    </div>
+    <div class="col-auto">
+        <select name="CategoriaFiltro" class="form-select" asp-items="@(new SelectList(Model.Categorias))">
+            <option value="">-- Todas las categorías --</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+        <a asp-page="./Index" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Product[0].Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.Product[0].Descripcion)</th>
+            <th>@Html.DisplayNameFor(model => model.Product[0].Precio)</th>
+            <th>@Html.DisplayNameFor(model => model.Product[0].Stock)</th>
+            <th>@Html.DisplayNameFor(model => model.Product[0].Categoria)</th>
+            <th>@Html.DisplayNameFor(model => model.Product[0].UnidadMedida)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Product) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+            <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+            <td>@Html.DisplayFor(modelItem => item.Precio)</td>
+            <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+            <td>@Html.DisplayFor(modelItem => item.Categoria)</td>
+            <td>@Html.DisplayFor(modelItem => item.UnidadMedida)</td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Detalles</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@if (!Model.Product.Any())
+{
+    <p class="text-muted">No se encontraron productos.</p>
+}

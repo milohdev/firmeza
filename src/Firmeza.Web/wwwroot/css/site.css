@@ -1,0 +1,126 @@
+:root {
+  --color-primary: #d97a3f;      /* naranja terracota - acento */
+  --color-primary-dark: #b8612e;
+  --color-dark: #2b2d31;          /* sidebar */
+  --color-dark-hover: #3a3d42;
+  --color-light: #f5f3f0;         /* fondo general */
+  --color-border: #e0ddd8;
+  --color-text: #2b2d31;
+  --color-text-muted: #6c6f73;
+  --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-main);
+  background-color: var(--color-light);
+  color: var(--color-text);
+}
+
+/* ===== Sidebar ===== */
+#wrapper > div:first-child {
+  background-color: var(--color-dark) !important;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+#wrapper h4 {
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+#wrapper .nav-link {
+  border-radius: 6px;
+  padding: 0.65rem 1rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+
+#wrapper .nav-link:hover {
+  background-color: var(--color-dark-hover);
+  padding-left: 1.25rem;
+}
+
+#wrapper .nav-link.active {
+  background-color: var(--color-primary);
+  color: #fff !important;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navbar-brand {
+  font-weight: 600;
+  color: var(--color-text) !important;
+}
+
+/* ===== Cards (dashboard) ===== */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.card .card-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+}
+
+.card .fs-2 {
+  font-weight: 700;
+}
+
+/* ===== Botones ===== */
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+/* ===== Tablas ===== */
+.table thead {
+  background-color: #fff;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* ===== Contenedores generales ===== */
+main {
+  padding: 1.5rem;
+}
+
+h1 {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+}
+
+/* ===== Footer ===== */
+footer {
+  background-color: #fff;
+  padding: 1rem 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}

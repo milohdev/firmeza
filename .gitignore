@@ -1,0 +1,23 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# .NET
+*.dll
+*.pdb
+
+# Logs
+*.log
+
+# Database
+*.db
+
+# Docker
+**/Dockerfile.dev
