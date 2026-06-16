@@ -1,0 +1,178 @@
+@page
+@model Firmeza.Web.Pages.Ventas.CreateModel
+@using Firmeza.Web.Models
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Crear Venta";
+}
+
+<h1>Crear Venta</h1>
+<hr />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <span class="text-danger">*</span>
+                <label asp-for="Venta.Fecha" class="form-label"></label>
+                <input asp-for="Venta.Fecha" type="date" class="form-control" />
+                <span asp-validation-for="Venta.Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <span class="text-danger">*</span>
+                <label asp-for="Venta.ClienteId" class="form-label"></label>
+                <select asp-for="Venta.ClienteId" asp-items="Model.ClientesOptions" class="form-select">
+                    <option value="0">-- Seleccionar cliente --</option>
+                </select>
+                <span asp-validation-for="Venta.ClienteId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <h5>Productos</h5>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Producto</th>
+                <th style="width:120px">Cantidad</th>
+                <th style="width:150px">Precio unitario</th>
+                <th style="width:130px">Subtotal</th>
+                <th style="width:60px"></th>
+            </tr>
+        </thead>
+        <tbody id="detalles-body">
+            @for (int i = 0; i < Model.Venta.Detalles.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <select name="Venta.Detalles[@i].ProductoId" class="form-select producto-select">
+                            <option value="0">-- Seleccionar producto --</option>
+                            @foreach (var p in Model.ProductosLista)
+                            {
+                                <option value="@p.Id" data-precio="@p.Precio.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"
+                                        selected="@(p.Id == Model.Venta.Detalles[i].ProductoId)">
+                                    @p.Nombre
+                                </option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="Venta.Detalles[@i].Cantidad"
+                               class="form-control cantidad-input" min="1"
+                               value="@Model.Venta.Detalles[i].Cantidad" />
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" name="Venta.Detalles[@i].PrecioUnitario"
+                               class="form-control precio-input" min="0.01"
+                               value="@Model.Venta.Detalles[i].PrecioUnitario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" />
+                    </td>
+                    <td class="subtotal-cell align-middle fw-bold">
+                        @((Model.Venta.Detalles[i].Cantidad * Model.Venta.Detalles[i].PrecioUnitario).ToString("C"))
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="eliminarFila(this)">×</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-outline-secondary mb-3" onclick="agregarFila()">+ Agregar producto</button>
+
+    <div class="mb-3">
+        <strong>Total: <span id="total-display">$0.00</span></strong>
+    </div>
+
+    <div class="mb-3">
+        <input type="submit" value="Guardar Venta" class="btn btn-primary" />
+        <a asp-page="./Index" class="btn btn-outline-secondary ms-2">Cancelar</a>
+    </div>
+</form>
+
+<script type="application/json" id="productos-data">@Html.Raw(Model.ProductosJson)</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const productos = JSON.parse(document.getElementById('productos-data').textContent);
+        let rowIndex = document.querySelectorAll('#detalles-body tr').length;
+
+        function buildOptions(selectedId) {
+            let html = '<option value="0">-- Seleccionar producto --</option>';
+            productos.forEach(p => {
+                const sel = p.id == selectedId ? 'selected' : '';
+                html += `<option value="${p.id}" data-precio="${p.precio}" ${sel}>${p.nombre}</option>`;
+            });
+            return html;
+        }
+
+        function agregarFila() {
+            const tbody = document.getElementById('detalles-body');
+            const i = rowIndex;
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td><select name="Venta.Detalles[${i}].ProductoId" class="form-select producto-select">${buildOptions(0)}</select></td>
+                <td><input type="number" name="Venta.Detalles[${i}].Cantidad" class="form-control cantidad-input" min="1" value="1" /></td>
+                <td><input type="number" step="0.01" name="Venta.Detalles[${i}].PrecioUnitario" class="form-control precio-input" min="0.01" /></td>
+                <td class="subtotal-cell align-middle fw-bold">$0.00</td>
+                <td><button type="button" class="btn btn-sm btn-danger" onclick="eliminarFila(this)">×</button></td>
+            `;
+            tbody.appendChild(fila);
+            rowIndex++;
+            attachFilaEvents(fila);
+            calcularTotal();
+        }
+
+        function eliminarFila(btn) {
+            btn.closest('tr').remove();
+            reindexar();
+            calcularTotal();
+        }
+
+        function reindexar() {
+            document.querySelectorAll('#detalles-body tr').forEach((fila, i) => {
+                fila.querySelectorAll('select, input').forEach(el => {
+                    el.name = el.name.replace(/\[\d+\]/, `[${i}]`);
+                });
+            });
+            rowIndex = document.querySelectorAll('#detalles-body tr').length;
+        }
+
+        function actualizarSubtotal(fila) {
+            const cantidad = parseFloat(fila.querySelector('.cantidad-input').value) || 0;
+            const precio = parseFloat(fila.querySelector('.precio-input').value) || 0;
+            fila.querySelector('.subtotal-cell').textContent = '$' + (cantidad * precio).toFixed(2);
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let total = 0;
+            document.querySelectorAll('#detalles-body tr').forEach(fila => {
+                const cant = parseFloat(fila.querySelector('.cantidad-input')?.value) || 0;
+                const prec = parseFloat(fila.querySelector('.precio-input')?.value) || 0;
+                total += cant * prec;
+            });
+            document.getElementById('total-display').textContent = '$' + total.toFixed(2);
+        }
+
+        function attachFilaEvents(fila) {
+            fila.querySelector('.producto-select').addEventListener('change', function () {
+                const opt = this.options[this.selectedIndex];
+                fila.querySelector('.precio-input').value = opt.dataset.precio || '';
+                actualizarSubtotal(fila);
+            });
+            fila.querySelector('.cantidad-input').addEventListener('input', () => actualizarSubtotal(fila));
+            fila.querySelector('.precio-input').addEventListener('input', () => actualizarSubtotal(fila));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#detalles-body tr').forEach(fila => {
+                attachFilaEvents(fila);
+                actualizarSubtotal(fila);
+            });
+        });
+    </script>
+}

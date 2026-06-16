@@ -18,12 +18,22 @@ html, body {
 }
 
 /* ===== Sidebar ===== */
-#wrapper > div:first-child {
-  background-color: var(--color-dark) !important;
+#sidebar {
+  background-color: var(--color-dark);
+  width: 240px;
+  min-height: 100vh;
+  flex-shrink: 0;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-#wrapper h4 {
+.sidebar-top {
+  flex: 1;
+}
+
+#sidebar h4 {
   color: var(--color-primary);
   font-weight: 700;
   letter-spacing: 1px;
@@ -31,7 +41,20 @@ html, body {
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-#wrapper .nav-link {
+.sidebar-group-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0.25rem 0.5rem 0.35rem;
+}
+
+.sidebar-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 0.5rem 0 0.75rem;
+}
+
+#sidebar .nav-link {
   border-radius: 6px;
   padding: 0.65rem 1rem;
   margin-bottom: 0.25rem;
@@ -39,14 +62,55 @@ html, body {
   transition: background-color 0.15s ease, padding-left 0.15s ease;
 }
 
-#wrapper .nav-link:hover {
+#sidebar .nav-link:hover {
   background-color: var(--color-dark-hover);
   padding-left: 1.25rem;
 }
 
-#wrapper .nav-link.active {
+#sidebar .nav-link.active {
   background-color: var(--color-primary);
   color: #fff !important;
+}
+
+/* Sidebar user info */
+.sidebar-user {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sidebar-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.sidebar-user-info {
+  overflow: hidden;
+}
+
+.sidebar-user-email {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-role {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* ===== Navbar ===== */
@@ -104,6 +168,20 @@ html, body {
 
 .table td {
   vertical-align: middle;
+}
+
+.table tbody tr {
+  transition: background-color 0.1s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f0ede8;
+}
+
+/* ===== Formularios ===== */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
 }
 
 /* ===== Contenedores generales ===== */

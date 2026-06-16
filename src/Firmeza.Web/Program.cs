@@ -1,6 +1,7 @@
 using Firmeza.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,8 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 using (var scope = app.Services.CreateScope())
 {

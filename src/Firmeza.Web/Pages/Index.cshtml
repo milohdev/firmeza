@@ -1,5 +1,6 @@
-﻿@page
+@page
 @model IndexModel
+@using Firmeza.Web.Models
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -34,3 +35,48 @@
         </div>
     </div>
 </div>
+
+<h5 class="mt-4 mb-3">Actividad reciente</h5>
+
+@if (!Model.UltimasVentas.Any())
+{
+    <p class="text-muted">Sin ventas registradas aún.</p>
+}
+else
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model.UltimasVentas)
+                    {
+                        <tr>
+                            <td>@v.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@v.Cliente?.Nombre</td>
+                            <td>@v.Total.ToString("C")</td>
+                            <td>
+                                @{
+                                    var badge = v.Estado switch
+                                    {
+                                        SaleStatus.Pagada  => "bg-success",
+                                        SaleStatus.Anulada => "bg-danger",
+                                        _                  => "bg-warning text-dark"
+                                    };
+                                }
+                                <span class="badge @badge">@v.Estado</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

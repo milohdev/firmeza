@@ -1,4 +1,4 @@
-﻿services:
+services:
   db:
     image: postgres:16
     container_name: firmeza_db
@@ -26,6 +26,9 @@
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=firmeza_db;Username=postgres;Password=firmeza123"
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
+    volumes:
+      - firmeza_recibos:/app/wwwroot/recibos
 
 volumes:
   firmeza_pgdata:
+  firmeza_recibos:

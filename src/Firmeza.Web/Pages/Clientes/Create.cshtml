@@ -10,51 +10,48 @@
 <h4>Cliente</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="mb-3">
                 <span class="text-danger">*</span>
-                <label asp-for="Cliente.Nombre" class="control-label"></label>
+                <label asp-for="Cliente.Nombre" class="form-label"></label>
                 <input asp-for="Cliente.Nombre" class="form-control" aria-required="true"/>
                 <span asp-validation-for="Cliente.Nombre" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <span class="text-danger">*</span>
-                <label asp-for="Cliente.Documento" class="control-label"></label>
+                <label asp-for="Cliente.Documento" class="form-label"></label>
                 <input asp-for="Cliente.Documento" class="form-control" aria-required="true"/>
                 <span asp-validation-for="Cliente.Documento" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Cliente.Email" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Cliente.Email" class="form-label"></label>
                 <input asp-for="Cliente.Email" class="form-control" />
                 <span asp-validation-for="Cliente.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Cliente.Telefono" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Cliente.Telefono" class="form-label"></label>
                 <input asp-for="Cliente.Telefono" class="form-control" />
                 <span asp-validation-for="Cliente.Telefono" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Cliente.Direccion" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Cliente.Direccion" class="form-label"></label>
                 <input asp-for="Cliente.Direccion" class="form-control" />
                 <span asp-validation-for="Cliente.Direccion" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <span class="text-danger">*</span>
-                <label asp-for="Cliente.EdadInput" class="control-label">Edad</label>
+                <label asp-for="Cliente.EdadInput" class="form-label">Edad</label>
                 <input asp-for="Cliente.EdadInput" class="form-control" aria-required="true" placeholder="Ej: 25"/>
                 <span asp-validation-for="Cliente.EdadInput" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-page="Index" class="btn btn-outline-secondary ms-2">Cancelar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index">Volver al listado</a>
 </div>
 
 @section Scripts {

@@ -1,0 +1,82 @@
+@page
+@model Firmeza.Web.Pages.Ventas.IndexModel
+@using Firmeza.Web.Models
+
+@{
+    ViewData["Title"] = "Ventas";
+}
+
+<h1>Ventas</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <a asp-page="Create" class="btn btn-primary">Crear Nueva Venta</a>
+    <form method="get">
+        <input type="hidden" name="Busqueda" value="@Model.Busqueda" />
+        <input type="hidden" name="EstadoFiltro" value="@Model.EstadoFiltro" />
+        <button type="submit" name="export" value="excel" class="btn btn-outline-success btn-sm">
+            ⬇ Excel
+        </button>
+    </form>
+</div>
+
+<form method="get" class="row g-3 mb-3">
+    <div class="col-auto">
+        <input type="text" name="Busqueda" value="@Model.Busqueda" class="form-control" placeholder="Buscar por cliente..." />
+    </div>
+    <div class="col-auto">
+        <select name="EstadoFiltro" class="form-select">
+            <option value="">-- Todos los estados --</option>
+            @foreach (SaleStatus s in Enum.GetValues(typeof(SaleStatus)))
+            {
+                <option value="@s" selected="@(Model.EstadoFiltro == s.ToString())">@s</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+        <a asp-page="./Index" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Ventas)
+        {
+            <tr>
+                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                <td>@item.Cliente?.Nombre</td>
+                <td>@item.Total.ToString("C")</td>
+                <td>
+                    @{
+                        var badgeClass = item.Estado switch
+                        {
+                            SaleStatus.Pagada => "bg-success",
+                            SaleStatus.Anulada => "bg-danger",
+                            _ => "bg-warning text-dark"
+                        };
+                    }
+                    <span class="badge @badgeClass">@item.Estado</span>
+                </td>
+                <td class="text-nowrap">
+                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Editar</a>
+                    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm">Detalles</a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Ventas.Any())
+{
+    <p class="text-muted">No se encontraron ventas.</p>
+}

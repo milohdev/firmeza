@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -13,10 +13,12 @@
     <div class="d-flex" id="wrapper">
 
         <!-- Sidebar -->
-        <div class="bg-dark text-white" style="width: 240px; min-height: 100vh; flex-shrink: 0;">
-            <div class="p-3">
+        <div id="sidebar" class="text-white">
+            <div class="sidebar-top p-3">
                 <h4 class="text-center mb-4">FIRMEZA</h4>
-                <ul class="nav nav-pills flex-column">
+
+                <div class="sidebar-group-label">Principal</div>
+                <ul class="nav nav-pills flex-column mb-2">
                     <li class="nav-item">
                         <a class="nav-link text-white @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")"
                            asp-area="" asp-page="/Index">
@@ -42,7 +44,32 @@
                         </a>
                     </li>
                 </ul>
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-group-label">Herramientas</div>
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/CargaMasiva") == true ? "active" : "")"
+                           asp-area="" asp-page="/CargaMasiva/Index">
+                            📥 Carga Masiva
+                        </a>
+                    </li>
+                </ul>
             </div>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="sidebar-user p-3">
+                    <div class="sidebar-user-avatar">
+                        @(User.Identity.Name?.Substring(0, 1).ToUpperInvariant() ?? "U")
+                    </div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-email">@User.Identity.Name</div>
+                        <div class="sidebar-user-role">Administrador</div>
+                    </div>
+                </div>
+            }
         </div>
 
         <!-- Contenido principal -->
@@ -62,6 +89,13 @@
 
             <div class="container-fluid flex-grow-1">
                 <main role="main" class="pb-3">
+                    @if (TempData["Exito"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                            @TempData["Exito"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
                     @RenderBody()
                 </main>
             </div>

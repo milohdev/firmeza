@@ -1,0 +1,72 @@
+@page
+@model Firmeza.Web.Pages.Ventas.DetailsModel
+@using Firmeza.Web.Models
+
+@{
+    ViewData["Title"] = "Detalle de Venta";
+}
+
+<h1>Detalle de Venta</h1>
+<hr />
+
+
+<dl class="row">
+    <dt class="col-sm-2">Fecha</dt>
+    <dd class="col-sm-10">@Model.Venta.Fecha.ToString("dd/MM/yyyy")</dd>
+
+    <dt class="col-sm-2">Cliente</dt>
+    <dd class="col-sm-10">@Model.Venta.Cliente?.Nombre</dd>
+
+    <dt class="col-sm-2">Estado</dt>
+    <dd class="col-sm-10">
+        @{
+            var badgeClass = Model.Venta.Estado switch
+            {
+                SaleStatus.Pagada => "bg-success",
+                SaleStatus.Anulada => "bg-danger",
+                _ => "bg-warning text-dark"
+            };
+        }
+        <span class="badge @badgeClass">@Model.Venta.Estado</span>
+    </dd>
+</dl>
+
+<h5 class="mt-3">Productos</h5>
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model.Venta.Detalles)
+        {
+            <tr>
+                <td>@d.Producto?.Nombre</td>
+                <td>@d.Cantidad</td>
+                <td>@d.PrecioUnitario.ToString("C")</td>
+                <td>@d.Subtotal.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-end fw-bold">Total</td>
+            <td class="fw-bold">@Model.Venta.Total.ToString("C")</td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="mt-3 d-flex gap-2 flex-wrap">
+    <a asp-page="./Edit" asp-route-id="@Model.Venta.Id" class="btn btn-secondary">Editar</a>
+    <a asp-page="./Index" class="btn btn-outline-secondary">Volver al listado</a>
+    @if (Model.TieneRecibo)
+    {
+        <a href="/recibos/recibo-@(Model.Venta.Id).pdf" download class="btn btn-success">
+            ⬇ Descargar Recibo
+        </a>
+    }
+</div>

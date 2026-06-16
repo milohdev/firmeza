@@ -7,9 +7,34 @@
 
 <h1>Productos</h1>
 
-<p>
+<div class="d-flex justify-content-between align-items-center mb-2">
     <a asp-page="Create" class="btn btn-primary">Crear Nuevo</a>
-</p>
+    <div class="dropdown">
+        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            ⬇ Exportar
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+                <form method="get" class="d-contents">
+                    <input type="hidden" name="Busqueda" value="@Model.Busqueda" />
+                    <input type="hidden" name="CategoriaFiltro" value="@Model.CategoriaFiltro" />
+                    <button type="submit" name="export" value="excel" class="dropdown-item">
+                        📊 Excel
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form method="get" class="d-contents">
+                    <input type="hidden" name="Busqueda" value="@Model.Busqueda" />
+                    <input type="hidden" name="CategoriaFiltro" value="@Model.CategoriaFiltro" />
+                    <button type="submit" name="export" value="pdf" class="dropdown-item">
+                        📄 PDF
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <form method="get" class="row g-3 mb-3">
     <div class="col-auto">
@@ -47,10 +72,10 @@
             <td>@Html.DisplayFor(modelItem => item.Stock)</td>
             <td>@Html.DisplayFor(modelItem => item.Categoria)</td>
             <td>@Html.DisplayFor(modelItem => item.UnidadMedida)</td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Detalles</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Eliminar</a>
+            <td class="text-nowrap">
+                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Editar</a>
+                <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm">Detalles</a>
+                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Eliminar</a>
             </td>
         </tr>
 }

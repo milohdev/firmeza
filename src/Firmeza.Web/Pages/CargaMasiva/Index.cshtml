@@ -1,0 +1,160 @@
+@page
+@model Firmeza.Web.Pages.CargaMasiva.IndexModel
+@using Firmeza.Web.ViewModels
+
+@{
+    ViewData["Title"] = "Carga Masiva";
+}
+
+<h1>Carga Masiva desde Excel</h1>
+<hr />
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Subir archivo .xlsx</h5>
+                <p class="card-text text-muted small">
+                    El archivo debe tener una hoja con los encabezados en la primera fila.
+                    Una misma fila puede incluir datos de Producto, Cliente y Venta simultáneamente.
+                </p>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label asp-for="Archivo" class="form-label">Archivo Excel</label>
+                        <input asp-for="Archivo" type="file" class="form-control" accept=".xlsx" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Procesar archivo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <h6 class="card-title">Columnas reconocidas</h6>
+                <div class="row small">
+                    <div class="col-6">
+                        <strong>Producto</strong> (si NombreProducto presente)
+                        <ul class="ps-3 mb-2">
+                            <li>NombreProducto <span class="text-danger">*</span></li>
+                            <li>DescripcionProducto</li>
+                            <li>PrecioProducto <span class="text-danger">*</span></li>
+                            <li>StockProducto <span class="text-danger">*</span></li>
+                            <li>CategoriaProducto</li>
+                            <li>UnidadMedida</li>
+                        </ul>
+                        <strong>Cliente</strong> (si Documento presente)
+                        <ul class="ps-3 mb-0">
+                            <li>NombreCliente <span class="text-danger">*</span></li>
+                            <li>Documento <span class="text-danger">*</span></li>
+                            <li>EmailCliente</li>
+                            <li>TelefonoCliente</li>
+                            <li>DireccionCliente</li>
+                            <li>Edad <span class="text-danger">*</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <strong>Venta/Detalle</strong> (si FechaVenta presente)
+                        <ul class="ps-3 mb-0">
+                            <li>DocumentoCliente <span class="text-danger">*</span></li>
+                            <li>FechaVenta <span class="text-danger">*</span></li>
+                            <li>NombreProductoVenta <span class="text-danger">*</span></li>
+                            <li>CantidadVenta <span class="text-danger">*</span></li>
+                            <li>PrecioUnitarioVenta <span class="text-danger">*</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorGeneral))
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @Model.ErrorGeneral
+    </div>
+}
+
+@if (Model.Resultado != null)
+{
+    var r = Model.Resultado;
+    <h4 class="mt-4">Resultado del procesamiento</h4>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card text-center border-primary">
+                <div class="card-body py-2">
+                    <div class="fs-3 fw-bold text-primary">@r.ProductosInsertados</div>
+                    <div class="small text-muted">Productos insertados</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center border-info">
+                <div class="card-body py-2">
+                    <div class="fs-3 fw-bold text-info">@r.ProductosActualizados</div>
+                    <div class="small text-muted">Productos actualizados</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center border-primary">
+                <div class="card-body py-2">
+                    <div class="fs-3 fw-bold text-primary">@r.ClientesInsertados</div>
+                    <div class="small text-muted">Clientes insertados</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center border-info">
+                <div class="card-body py-2">
+                    <div class="fs-3 fw-bold text-info">@r.ClientesActualizados</div>
+                    <div class="small text-muted">Clientes actualizados</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center border-success">
+                <div class="card-body py-2">
+                    <div class="fs-3 fw-bold text-success">@r.VentasCreadas</div>
+                    <div class="small text-muted">Ventas creadas</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center @(r.Errores.Any() ? "border-danger" : "border-success")">
+                <div class="card-body py-2">
+                    <div class="fs-3 fw-bold @(r.Errores.Any() ? "text-danger" : "text-success")">@r.Errores.Count</div>
+                    <div class="small text-muted">Filas con error</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (r.Errores.Any())
+    {
+        <h5>Filas con inconsistencias <span class="badge bg-warning text-dark">@r.Errores.Count</span></h5>
+        <table class="table table-sm table-bordered">
+            <thead class="table-warning">
+                <tr>
+                    <th style="width:90px">Fila</th>
+                    <th>Descripción del error</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in r.Errores)
+                {
+                    <tr>
+                        <td class="text-center">@e.Fila</td>
+                        <td>@e.Descripcion</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-success">Todos los datos se procesaron sin inconsistencias.</div>
+    }
+}
